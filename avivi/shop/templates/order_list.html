@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Order List</h2>
+  {% for order in orders %}
+    <div>
+      <h3>{{ order.item.name }}</h3>
+      <p>Quantity: {{ order.count }}</p>
+    </div>
+  {% endfor %}
+{% endblock %}
