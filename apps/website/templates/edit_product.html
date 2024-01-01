@@ -7,7 +7,7 @@
         <label for="name">Name:</label>
         <input type="text" id="name" name="name" value="{{ product.name }}" required><br>
         <label for="price">Price:</label>
-        <input type="text" id="price" name="price" value="{{ product.price }}" required><br>
+        <input type="number" id="price" name="price" value="{{ product.price }}" required><br>
         <label for="description">Description:</label>
         <textarea id="description" name="description" required>{{ product.description }}</textarea><br>
         <button type="submit">Save Changes</button>

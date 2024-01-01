@@ -20,6 +20,8 @@ def register_view(request):
 
 
 def login_view(request):
+    if request.user.is_authenticated:
+        return redirect('product_list')
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']

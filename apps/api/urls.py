@@ -6,10 +6,8 @@ from .views import ProductViewSet, UserViewSet, OrderViewSet
 router = DefaultRouter()
 router.register(r'products', ProductViewSet, basename='product')
 router.register(r'users', UserViewSet, basename='user')
-router.register(r'orders',OrderViewSet,basename='order')
+router.register(r'orders', OrderViewSet,basename='order')
 
 
 # The API URLs are now determined automatically by the router.
-urlpatterns = [
-    path('', include(router.urls)),
-]
+urlpatterns = router.urls
