@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from .models import Product, Order
+from .models import Product, Order, Card
 
 
 def register_view(request):
@@ -49,14 +49,14 @@ def create_order(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     if request.method == 'POST':
         count = int(request.POST.get('count', 1))
-        Order.objects.create(user=request.user, item=product, count=count)
+        Order.objects.create(user=request.user, item=product, count=count, total_price=product.price*count, paid=False)
         return redirect('order_list')
     return render(request, 'create_order.html', {'product': product})
 
 
 @login_required
 def order_list(request):
-    orders = Order.objects.filter(user=request.user)
+    orders = Order.objects.filter(user=request.user, paid=0)
     return render(request, 'order_list.html', {'orders': orders})
 
 
@@ -89,6 +89,25 @@ def edit_product(request, product_id):
         return redirect('user_products')
     return render(request, 'edit_product.html', {'product': product})
 
+
+@login_required
+def payment(request, order_id):
+    order = get_object_or_404(Order, pk=order_id, user=request.user)
+    if request.method == 'POST':
+        number = request.POST.get('number')
+        date = request.POST.get('date')
+        cvv = request.POST.get('cvv')
+
+        if number and date and cvv:  #якщо карта існує, якщо не існує - ексепшн
+            Card.objects.get(
+                number=number,
+                date=date,
+                cvv=cvv,
+            )
+            order.paid = True
+            order.save()
+            return redirect('order_list')
+    return render(request, 'payment.html')
 
 @login_required
 def user_products(request):

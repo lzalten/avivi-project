@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Pay for the order</h2>
+    <form method="post" action="">
+        {% csrf_token %}
+        <label for="number">Card number:</label>
+        <input type="number" id="number" name="number" required><br>
+        <label for="date">Date:</label>
+        <input type="text" id="date" name="date" required><br>
+        <label for="cvv">cvv:</label>
+        <input type="number" id="cvv" name="cvv" required><br>
+        <textarea id="description" name="description" required></textarea><br>
+        <button type="submit">Pay for the order</button>
+    </form>
+{% endblock %}

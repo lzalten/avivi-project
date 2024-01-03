@@ -2,10 +2,18 @@
 
 {% block content %}
   <h2>Order List</h2>
-  {% for order in orders %}
-    <div>
-      <h3>{{ order.item.name }}</h3>
-      <p>Quantity: {{ order.count }}</p>
+
+    <div class="product-grid">
+        {% for order in orders %}
+            <div class="product-card">
+                <h3>{{ order.item.name }}</h3>
+                <p>Price: ${{ order.item.price }}</p>
+                <p>Count: ${{ order.count }}</p>
+                <p>Total Price: ${{ order.total_price }}</p>
+                <p>{{ order.item.description }}</p>
+                <a href="{% url 'payment' order.id %}">Pay for the order</a>
+                <!---->
+            </div>
+        {% endfor %}
     </div>
-  {% endfor %}
 {% endblock %}

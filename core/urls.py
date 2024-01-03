@@ -34,4 +34,5 @@ urlpatterns = [
     path('add_product/', add_product, name='add_product'),
     path('edit_product/<int:product_id>/', edit_product, name='edit_product'),
     path('user_products/', user_products, name='user_products'),
+    path('payment/<int:order_id>', payment, name='payment')
 ]
