@@ -2,7 +2,7 @@
 
 {% block content %}
   <h2>Order List</h2>
-
+    <script src="https://js.stripe.com/v3/"></script>
     <div class="product-grid">
         {% for order in orders %}
             <div class="product-card">
@@ -11,9 +11,46 @@
                 <p>Count: ${{ order.count }}</p>
                 <p>Total Price: ${{ order.total_price }}</p>
                 <p>{{ order.item.description }}</p>
-                <a href="{% url 'payment' order.id %}">Pay for the order</a>
+                <button class="checkout-button" data-order-id='{{ order.id }}'>Pay for the order</button>
                 <!---->
             </div>
         {% endfor %}
     </div>
+{% csrf_token %}
+  <script type="text/javascript">
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    // Create an instance of the Stripe object with your publishable API key
+    var stripe = Stripe("pk_test_51OUSvrIySRStMzFUrAtnwEaXrvSOlJHwRXsvOsprFCQiqlCSmA7lG1FKm0kU2SJLwr9XBN8AXgCDAIeURWAyFeR600mN10zVG5");
+    var checkoutButtons = document.getElementsByClassName("checkout-button");
+    for(let button of checkoutButtons){
+        button.addEventListener("click", function () {
+          fetch("/create_checkout_session/" + button.getAttribute("data-order-id") + "/", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken
+                }
+                })
+            .then(function (response) {
+              return response.json();
+            })
+            .then(function (session) {
+              return stripe.redirectToCheckout({ sessionId: session.id });
+            })
+            .then(function (result) {
+              // If redirectToCheckout fails due to a browser or network
+              // error, you should display the localized error message to your
+              // customer using error.message.
+              if (result.error) {
+                alert(result.error.message);
+              }
+            })
+            .catch(function (error) {
+              console.error("Error:", error);
+            });
+        });
+    }
+
+  </script>
 {% endblock %}

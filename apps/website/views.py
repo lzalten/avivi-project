@@ -91,25 +91,6 @@ def edit_product(request, product_id):
 
 
 @login_required
-def payment(request, order_id):
-    order = get_object_or_404(Order, pk=order_id, user=request.user)
-    if request.method == 'POST':
-        number = request.POST.get('number')
-        date = request.POST.get('date')
-        cvv = request.POST.get('cvv')
-
-        if number and date and cvv:  #якщо карта існує, якщо не існує - ексепшн
-            Card.objects.get(
-                number=number,
-                date=date,
-                cvv=cvv,
-            )
-            order.paid = True
-            order.save()
-            return redirect('order_list')
-    return render(request, 'payment.html')
-
-@login_required
 def user_products(request):
     products = Product.objects.filter(user=request.user)
     return render(request, 'user_products.html', {'products': products})

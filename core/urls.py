@@ -16,10 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.views.decorators.csrf import csrf_exempt
 
 from apps.api import urls as apiurls
 from apps.website.views import *
-
+from payments.views import CreateCheckoutSessionView, SuccessView, CancelView
 
 urlpatterns = [
     path('', login_view),
@@ -34,5 +35,7 @@ urlpatterns = [
     path('add_product/', add_product, name='add_product'),
     path('edit_product/<int:product_id>/', edit_product, name='edit_product'),
     path('user_products/', user_products, name='user_products'),
-    path('payment/<int:order_id>', payment, name='payment')
+    path('create_checkout_session/<int:order_id>/', CreateCheckoutSessionView.as_view(), name='create_checkout_session'),
+    path('success_payment/', SuccessView.as_view()),
+    path('decline_payment/', CancelView.as_view()),
 ]
