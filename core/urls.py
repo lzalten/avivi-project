@@ -16,11 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from django.views.decorators.csrf import csrf_exempt
 
 from apps.api import urls as apiurls
 from apps.website.views import *
-from payments.views import CreateCheckoutSessionView, SuccessView, CancelView
+from apps.payments.stripe.views import CreateCheckoutSessionView, SuccessView, CancelView
 
 urlpatterns = [
     path('', login_view),

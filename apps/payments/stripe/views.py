@@ -32,7 +32,7 @@ class CreateCheckoutSessionView(View):
                 "order_id": order.id
             },
             mode='payment',
-            success_url=YOUR_DOMAIN + '/success-payment/',
+            success_url=YOUR_DOMAIN + '/orders/',
             cancel_url=YOUR_DOMAIN + '/decline-payment/',
         )
         return JsonResponse({
