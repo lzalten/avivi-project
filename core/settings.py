@@ -25,6 +25,7 @@ environ.Env.read_env(env_file=f'{BASE_DIR}/.env')
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env('DJANGO_SECRET_KEY')
 STRIPE_SECRET_KEY = env('DJANGO_STRIPE_SECRET_KEY')
+INFURA_API_KEY = env('INFURA_API_KEY')
 STRIPE_PUBLISHABLE_KEY = ('pk_test_51OUSvrIySRStMzFUrAtnwEaXrvSOlJHwRXsvOsprFC'
                           'QiqlCSmA7lG1FKm0kU2SJLwr9XBN8AXgCDAIeURWAyFeR600mN10zVG5')
 
