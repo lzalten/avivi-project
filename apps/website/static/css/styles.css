@@ -58,3 +58,19 @@ footer {
     padding: 10px;
     width: 100%;
 }
+
+.chat-message {
+    width: 100%;
+    border: 2px solid palegreen;
+    border-radius: 6px;
+    margin: 2px 0px;
+}
+.card{
+    max-width: initial;
+}
+.card-block{
+    padding: 28px 20px;
+}
+.jumbotron{
+    background-color: white;
+}

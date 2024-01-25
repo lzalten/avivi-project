@@ -23,11 +23,12 @@ from apps.payments.stripe.views import CreateCheckoutSessionView, SuccessView, C
 
 urlpatterns = [
     path('', login_view),
+    path('chat/',include('apps.website.urls')),
     path('api/', include(apiurls)),
     path('register/', register_view, name='register'),
     path('login/', login_view, name='login'),
     path('logout/', logout_view, name='logout'),
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls, name='admin'),
     path('products/', product_list, name='product_list'),
     path('create_order/<int:product_id>/', create_order, name='create_order'),
     path('orders/', order_list, name='order_list'),

@@ -1,11 +1,13 @@
-from django.contrib.auth import login, authenticate, logout
+import random
+from itertools import chain
+
+from django.contrib.auth import login, authenticate, logout, get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404, redirect, Http404
 from django.contrib.auth.decorators import login_required
-from .models import Product, Order
-
-
+from .models import Product, Order, Room, Message
+from django.contrib.auth.models import User, Group
 
 def register_view(request):
     if request.method == 'POST':
@@ -95,3 +97,29 @@ def edit_product(request, product_id):
 def user_products(request):
     products = Product.objects.filter(user=request.user)
     return render(request, 'user_products.html', {'products': products})
+
+
+def rooms(request):
+
+    rooms = list(chain(Room.objects.filter(client=request.user), Room.objects.filter(manager=request.user)))
+    return render(request, "rooms.html", {"rooms": rooms})
+
+
+def room(request, slug):
+    room = Room.objects.get(slug=slug)
+    messages = Message.objects.filter(room=Room.objects.get(slug=slug))
+
+    return render(request, "room.html", {"room": room, "slug": slug, 'messages': messages})
+
+
+def create_chat(request):
+    if request.user.groups.filter(name='manager').exists() or request.user.is_superuser:
+        return redirect('rooms')
+    else:
+        random_manager = random.choice(User.objects.filter(groups__id__in=Group.objects.filter(name='manager')))
+        room_name = request.user.username+random_manager.username
+        room = Room(name=room_name, slug=room_name, client=request.user, manager=random_manager)
+        room.save()
+        return redirect('rooms')
+
+
