@@ -76,7 +76,7 @@
                 }
                 else
                 {
-                  chatSocket.send(JSON.stringify({ message: messageInput, username : "{{request.user.username}}",room_name:"{{room.name}}"}));
+                  chatSocket.send(JSON.stringify({ message: messageInput, username : "{{request.user.username}}",room_slug:"{{room.slug}}"}));
                 }
 
             };

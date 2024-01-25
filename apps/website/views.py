@@ -1,6 +1,5 @@
 import random
 from itertools import chain
-
 from django.contrib.auth import login, authenticate, logout, get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
@@ -106,7 +105,10 @@ def rooms(request):
 
 
 def room(request, slug):
-    room = Room.objects.get(slug=slug)
+    try:
+        room = Room.objects.get(slug=slug)
+    except:
+        room = Room.objects.get(slug=slug).first()
     messages = Message.objects.filter(room=Room.objects.get(slug=slug))
 
     return render(request, "room.html", {"room": room, "slug": slug, 'messages': messages})
@@ -118,7 +120,7 @@ def create_chat(request):
     else:
         random_manager = random.choice(User.objects.filter(groups__id__in=Group.objects.filter(name='manager')))
         room_name = request.user.username+random_manager.username
-        room = Room(name=room_name, slug=room_name, client=request.user, manager=random_manager)
+        room = Room(name=room_name, slug=room_name+str(random.randint(1,100000000)), client=request.user, manager=random_manager)
         room.save()
         return redirect('rooms')
 

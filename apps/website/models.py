@@ -30,7 +30,7 @@ class Room(models.Model):
     manager = models.ForeignKey(User, on_delete=models.CASCADE, related_name='manager')
 
     def __str__(self):
-        return "Room : " + self.name + " | Id : " + self.slug
+        return self.name
 
 
 class Message(models.Model):
