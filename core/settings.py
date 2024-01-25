@@ -50,12 +50,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
+    'channels',
 
     'apps.website',
     'apps.api',
     'apps.payments',
-
-    'channels',
 ]
 
 MIDDLEWARE = [

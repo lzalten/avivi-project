@@ -5,6 +5,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect, Http404
 from django.contrib.auth.decorators import login_required
+
+from .helpers.ChatHelper import ChatHelper
 from .models import Product, Order, Room, Message
 from django.contrib.auth.models import User, Group
 
@@ -99,7 +101,6 @@ def user_products(request):
 
 
 def rooms(request):
-
     rooms = list(chain(Room.objects.filter(client=request.user), Room.objects.filter(manager=request.user)))
     return render(request, "rooms.html", {"rooms": rooms})
 
@@ -107,21 +108,18 @@ def rooms(request):
 def room(request, slug):
     try:
         room = Room.objects.get(slug=slug)
-    except:
-        room = Room.objects.get(slug=slug).first()
-    messages = Message.objects.filter(room=Room.objects.get(slug=slug))
-
+        messages = Message.objects.filter(room=room)
+    except Exception as e:
+        print(e)
+        redirect('product_list')
     return render(request, "room.html", {"room": room, "slug": slug, 'messages': messages})
 
 
 def create_chat(request):
-    if request.user.groups.filter(name='manager').exists() or request.user.is_superuser:
-        return redirect('rooms')
+    if not request.user.is_authenticated or request.user.groups.filter(name='manager').exists() or request.user.is_superuser:
+        return redirect('product_list')
     else:
-        random_manager = random.choice(User.objects.filter(groups__id__in=Group.objects.filter(name='manager')))
-        room_name = request.user.username+random_manager.username
-        room = Room(name=room_name, slug=room_name+str(random.randint(1,100000000)), client=request.user, manager=random_manager)
-        room.save()
+        ChatHelper().create_room(request.user)
         return redirect('rooms')
 
 

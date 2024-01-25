@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Chat{% endblock %}
 
 {% block content %}
     {% if user.is_authenticated and room.client == request.user or room.manager == request.user %}
@@ -12,26 +12,22 @@
                 </div>
                 <form>
                     <div class="form-group">
-                      {% if messages %}
-                      <div class="jumbotron" id="chatbox" style="padding: 4px 2px;max-height: 300px; overflow-y: scroll;">
-                          {% for message in messages %}
-                            <div class="chat-message {% if message.user == request.user %}text-right{% else %}text-left{% endif %}">
-                              <b>{{ message.user.username }}</b> : {{ message.content }}<br>
-                            </div>
-                          {% endfor %}
-
-
-                      </div>
-                      {% else %}
-                      <div class="jumbotron" id="chatbox" style="padding: 4px 2px;"></div>
-                      <b>No Messages in this Room.</b>
+                        {% if messages %}
+                          <div class="jumbotron" id="chatbox" style="padding: 4px 2px;max-height: 300px; overflow-y: scroll;">
+                              {% for message in messages %}
+                                <div class="chat-message {% if message.user == request.user %}text-right{% else %}text-left{% endif %}">
+                                  <b>{{ message.user.username }}</b> : {{ message.content }}<br>
+                                </div>
+                              {% endfor %}
+                          </div>
+                        {% else %}
+                          <div class="jumbotron" id="chatbox" style="padding: 4px 2px;"></div>
                         {% endif %}
-
                     </div>
                     <br/>
-                    <div class="form-group" style="width: 100%;">
-                        <input class="form-control" placeholder="Enter text here" id="my_input" type="text" required></br>
-                    </div>
+                        <div class="form-group" style="width: 100%;">
+                            <input class="form-control" placeholder="Enter text here" id="my_input" type="text" required></br>
+                        </div>
                     <br/>
                     <input class="btn btn-primary btn-lg btn-block" id="submit_button" type="button" value="Send">
                 </form>

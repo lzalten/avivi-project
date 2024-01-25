@@ -7,47 +7,34 @@
     </div>
   <div class="container">
       {% if rooms%}
-        <div class="row equal">
+        <div class="product-grid">
             {% for room in rooms %}
-
-            <div class="col-sm-4 d-flex pb-3">
-                <div class="card bg-light mb-3" style="max-width: 18rem;">
-                    <div class="card-block">
-                        <h3 class="card-title">{{room.name}}</h3>
-                        <p class="card-text">It is Public group for this Project.</p>
-                        <a href="/chat/{{room.slug}}" class="btn btn-outline-secondary">Go to Room</a>
+                <div class="col-sm-4 d-flex pb-3">
+                    <div class="product-grid" style="max-width: 18rem;">
+                        <div class="product-card">
+                            <h3 class="card-title">{{room.name}}</h3>
+                            <a href="/website/chat/{{room.slug}}" class="btn btn-outline-secondary">[Go to Room]</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-
             {% endfor %}
-
-            
         </div>
-    {% else %}
-            No Rooms Available!
-    {% endif %}
+      {% else %}
+            No Rooms Available! Create it using button
+      {% endif %}
 
 </div>
 
 
 
 {% else %}
-<div class="container">
-    <div class="alert alert-info d-flex justify-content-between" role="alert">
-        <h5>You are not logged in</h5>
-        <a href="/accounts/logout/">
-          <button type="button" class="btn btn-light"><a href="{% url 'login' %}">Log In</a></button>
-        </a>
-      </div>
-</div>  
+    <div class="container">
+        <div class="alert alert-info d-flex justify-content-between" role="alert">
+            <h5>You are not logged in</h5>
+            <a href="/accounts/logout/">
+              <button type="button" class="btn btn-light"><a href="{% url 'login' %}">Log In</a></button>
+            </a>
+          </div>
+    </div>
 {% endif %}
-
-<br/>
-
-    
-
-
-
-
 {% endblock %}
