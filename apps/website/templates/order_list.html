@@ -25,7 +25,7 @@
     var checkoutButtons = document.getElementsByClassName("checkout-button");
     for(let button of checkoutButtons){
         button.addEventListener("click", function () {
-          fetch("/create_checkout_session/" + button.getAttribute("data-order-id") + "/", {
+          fetch("/website/create_checkout_session/" + button.getAttribute("data-order-id") + "/", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',

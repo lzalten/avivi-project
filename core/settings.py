@@ -136,6 +136,8 @@ USE_TZ = True
 
 STATIC_URL = 'apps/website/static/'
 
+LOGIN_URL = '/website/login/'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 

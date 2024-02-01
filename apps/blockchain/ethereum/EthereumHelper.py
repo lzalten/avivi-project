@@ -20,7 +20,7 @@ class EthereumHelper:
 
     def send_eth(self, private_key, amount, recipient_address):
         try:
-            nonce = self.w3.eth.get_transaction_count(w3.eth.account.from_key(private_key).address)
+            nonce = self.w3.eth.get_transaction_count(self.w3.eth.account.from_key(private_key).address)
             tx = {
                 'nonce': nonce,
                 'to': recipient_address,
@@ -30,17 +30,19 @@ class EthereumHelper:
             }
             signed_tx = self.w3.eth.account.sign_transaction(tx, private_key)
             tx_hash = self.w3.eth.send_raw_transaction(signed_tx.rawTransaction)
-            print(f"Transaction sent! Hash: {tx_hash.hex()}")
+            #print(f"Transaction sent! Hash: {tx_hash.hex()}")
+            return True
         except Exception as e:
-            print(f"Error sending transaction: {e}")
+            #print(f"Error sending transaction: {e}")
+            return False
 
     def send_erc20(self, private_key, amount, recipient_address, token=None):  # def token USDC
         if token is None:
             token = self.usdc_token_address
         token_address = token
         token_abi = self.erc20_abi
-        address = self.w3.eth.account.from_key(private_key).address
         try:
+            address = self.w3.eth.account.from_key(private_key).address
             token_contract = self.w3.eth.contract(address=token_address, abi=token_abi)
             token_decimals = token_contract.functions.decimals().call()
             total_amount = float(amount) * 10 ** token_decimals
@@ -56,10 +58,10 @@ class EthereumHelper:
                 })
             signed_tx = self.w3.eth.account.sign_transaction(tx, private_key)
             tx_hash = self.w3.eth.send_raw_transaction(signed_tx.rawTransaction)
-            print(f"Transaction sent! Hash: {tx_hash.hex()}")
-            return tx_hash.hex()
+            #print(f"Transaction sent! Hash: {tx_hash.hex()}")
+            return True
         except Exception as e:
-            print(f"Error sending transaction: {e}")
-            return 'error'
+            #print(f"Error sending transaction: {e}")
+            return False
 
 

@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from .serializers import UserSerializer, ProductSerializer, OrderSerializer
 from ..blockchain.ethereum.EthereumHelper import EthereumHelper
 from ..blockchain.tron.TronHelper import TronHelper
+from django.views import View
 
 
 class ProductViewSet(viewsets.ModelViewSet):
@@ -24,20 +25,20 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
 
 
-def create_tron_wallet(request):
-    if request.method == 'GET':
+class CreateTronWallet(View):
+    def get(self, request):
         wallet = TronHelper().create_tron_wallet()
         return JsonResponse({"address": wallet['address'], "private_key": wallet['private_key']}, safe=False)
 
 
-def create_ethereum_wallet(request):
-    if request.method == 'GET':
+class CreateEthWallet(View):
+    def get(self, request):
         wallet = EthereumHelper().create_ethereum_account()
         return JsonResponse({"address": wallet['address'], "private_key": wallet['private_key']}, safe=False)
 
 
-def create_trx_transaction(request, pk, amount, rec_address):
-    if request.method == 'GET':
+class CreateTrxTransaction(View):
+    def get(self, request, pk, amount, rec_address):
         res = TronHelper().send_trx(pk, amount, rec_address)
         response_data = {
             'transaction_data': str(res),
@@ -46,8 +47,8 @@ def create_trx_transaction(request, pk, amount, rec_address):
         return JsonResponse(response_data)
 
 
-def create_trc20_transaction(request, pk, amount, rec_address):
-    if request.method == 'GET':
+class CreateTrc20Transaction(View):
+    def get(self, request, pk, amount, rec_address):
         res = TronHelper().send_trc20(pk, amount, rec_address)
         response_data = {
             'transaction_data': str(res),
@@ -56,8 +57,8 @@ def create_trc20_transaction(request, pk, amount, rec_address):
         return JsonResponse(response_data)
 
 
-def create_eth_transaction(request, pk, amount, rec_address):
-    if request.method == 'GET':
+class CreateEthTransaction(View):
+    def get(self, request, pk, amount, rec_address):
         res = EthereumHelper().send_eth(pk, amount, rec_address)
         response_data = {
             'transaction_data': str(res),
@@ -66,8 +67,8 @@ def create_eth_transaction(request, pk, amount, rec_address):
         return JsonResponse(response_data)
 
 
-def create_erc20_transaction(request, pk, amount, rec_address):
-    if request.method == 'GET':
+class CreateErc20Transaction(View):
+    def get(self, request, pk, amount, rec_address):
         res = EthereumHelper().send_erc20(pk, amount, rec_address)
         response_data = {
             'transaction_data': str(res),

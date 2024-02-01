@@ -1,5 +1,6 @@
 import stripe
 from django.conf import settings
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 from django.views import View
 from django.views.generic import TemplateView
@@ -9,7 +10,7 @@ from apps.website.models import Order
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
-class CreateCheckoutSessionView(View):
+class CreateCheckoutSessionView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         order_id = self.kwargs['order_id']
         order = Order.objects.get(id=order_id)
@@ -32,7 +33,7 @@ class CreateCheckoutSessionView(View):
                 "order_id": order.id
             },
             mode='payment',
-            success_url=YOUR_DOMAIN + '/orders/',
+            success_url=YOUR_DOMAIN + '/website/orders/',
             cancel_url=YOUR_DOMAIN + '/decline-payment/',
         )
         return JsonResponse({
